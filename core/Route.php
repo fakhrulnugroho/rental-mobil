@@ -27,9 +27,14 @@ class Route {
 	}
 
 	protected function _setController(){
-		if($this->_url[0] != '') $this->_controller = 'C_' . ucfirst($this->_url[0]);
-		else $this->_controller = DEFAULT_CONTROLLER;
-
+		if($this->_url[0] != '') {
+			$controller = explode("_", $this->_url[0]);
+			$this->_controller = 'C_';
+			for ($i = 0; $i < count($controller); $i++) {
+				if($i > 0) $this->_controller .= '_';
+				$this->_controller .= ucfirst($controller[$i]);
+			}
+		} else $this->_controller = DEFAULT_CONTROLLER;
 		if(file_exists(C_PATH . DS . $this->_controller . '.php')) {
 			require_once C_PATH . DS . $this->_controller . '.php';
 			$this->_controller = new $this->_controller();
